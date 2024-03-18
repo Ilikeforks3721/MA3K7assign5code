@@ -1,0 +1,109 @@
+#Copy+paste this code into a JupyterLyte notebook
+import numpy as np
+rng = np.random.default_rng()
+
+#Values to change
+n = 5
+terminate = 100000
+oldi = 2
+oldj = 2
+#oldi is the row, oldj is the column
+
+i = oldi-1
+j = oldj-1
+square = n*n
+hello = np.arange(0, square)
+pr = 0
+startruns = terminate
+while terminate>0:
+    grid = np.zeros_like(hello)
+    onepos = i+n*j
+    grid[onepos] = 1
+    currenti = i
+    currentj = j
+    gridnumber = 2
+    while gridnumber < square+1:
+        direction = rng.integers(0,4)
+        check = 0
+        curpos = currenti+n*currentj
+#0 = right, 1 = left, 2 = up, 3 = down
+        if direction == 0:
+            if currenti == n-1:
+                check = 1
+            if currenti<n-1 and grid[curpos+1]>0:
+                check = 1
+            if check == 0:
+                currenti = currenti+1
+                curpos = currenti+n*currentj
+                grid[curpos] = gridnumber
+                gridnumber = gridnumber+1
+        if direction == 1:
+            if currenti == 0:
+                check = 1
+            if currenti>0 and grid[curpos-1]>0:
+                check = 1
+            if check == 0:
+                currenti = currenti-1
+                curpos = currenti+n*currentj
+                grid[curpos] = gridnumber
+                gridnumber = gridnumber+1
+        if direction == 2:
+            if currentj == 0:
+                check = 1
+            if currentj>0 and grid[curpos-n]>0:
+                check = 1
+            if check == 0:
+                currentj = currentj-1
+                curpos = currenti+n*currentj
+                grid[curpos] = gridnumber
+                gridnumber = gridnumber+1
+        if direction == 3:
+            if currentj == n-1:
+                check = 1
+            if currentj<n-1 and grid[curpos+n]>0:
+                check = 1
+            if check == 0:
+                currentj = currentj+1
+                curpos = currenti+n*currentj
+                grid[curpos] = gridnumber
+                gridnumber = gridnumber+1
+        faila = 0
+        failb = 0
+        failc = 0
+        faild = 0
+        if currenti > 0 and grid[curpos-1] > 0:
+            faila = 1
+        if currenti == 0:
+            faila = 1
+        if currenti < n-1 and grid[curpos+1] > 0:
+            failb = 1
+        if currenti == n-1:
+            failb = 1
+        if currentj > 0 and grid[curpos-n] > 0:
+            failc = 1
+        if currentj == 0:
+            failc = 1
+        if currentj < n-1 and grid[curpos+n] > 0:
+            faild = 1
+        if currentj == n-1:
+            faild = 1
+        fail = faila+failb+failc+faild
+        if fail == 4:
+            gridnumber = square+2
+        if gridnumber == square:
+            pr = 1
+            terminate = 0
+    terminate = terminate -1
+if n == 1:
+    pr = 2
+if pr == 2:
+    A_n = np.reshape(grid, (n, n))
+    print("Success! The cell with values (n , i , j) = (", n, ",", oldi, ",", oldj, ")has the following solution:")
+    print(A_n)
+if pr == 1:
+    A_n = np.reshape(grid, (n, n))
+    print("Success! The cell with values (n , i , j) = (", n, ",", oldi, ",", oldj, ")has the following solution:")
+    print(A_n)
+if pr == 0:
+    print("Failure. The program with values ( n , i , j ) = (", n, ",", oldi, ",", oldj, ") failed to find a solution after", startruns, "attempts.")
+    print("(This does not mean that this cell is guaranteed to have no solution.)")
